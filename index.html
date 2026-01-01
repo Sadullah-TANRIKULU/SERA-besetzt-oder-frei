@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="manifest" href="/manifest.json" />
+    <title>SERA Besetzt oder Frei</title>
+    <link rel="stylesheet" href="./src/style.css" />
+    <link rel="shortcut icon" href="/icons/sera-icon.png" type="image/x-icon" />
+  </head>
+  <body>
+    <header>
+      <div class="lang-switcher">
+        <button onclick="app.setLanguage('de')">DE</button>
+        <button onclick="app.setLanguage('tr')">TR</button>
+        <button onclick="app.setLanguage('en')">EN</button>
+      </div>
+      <header>
+        <div id="user-profile" style="display: none">
+          <span id="user-email"></span>
+          <button id="logout-btn" data-i18n="logout">Abmelden</button>
+        </div>
+      </header>
+      <h1 data-i18n="app_title">Raumplanung</h1>
+      <button id="install-btn" style="display: none" data-i18n="install_btn">
+        App Installieren
+      </button>
+    </header>
+
+    <main id="app">
+      <section id="login-section">
+        <input type="email" id="login-email" placeholder="Email" />
+        <button id="login-btn">Login / Magic Link</button>
+      </section>
+      <section id="status-section">
+        <h2 data-i18n="current_status">Aktueller Status</h2>
+        <div id="status-list">
+          <p data-i18n="loading">Laden...</p>
+        </div>
+      </section>
+
+      <hr />
+
+      <section id="booking-section">
+        <h2 data-i18n="book_room">Raum Buchen</h2>
+        <form id="booking-form">
+          <select id="room-select" name="room-select" required></select>
+          <input
+            type="datetime-local"
+            id="start-time"
+            name="start-time"
+            required
+          />
+          <input type="datetime-local" id="end-time" name="end-time" required />
+          <textarea
+            id="description"
+            data-i18n-placeholder="why_placeholder"
+          ></textarea>
+          <button type="submit" id="submit-btn" data-i18n="submit_booking">
+            <span id="btn-spinner" class="spinner hidden"></span>
+            <span id="btn-text" data-i18n="submit_booking">Reservieren</span>
+          </button>
+        </form>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,142 @@
+:root {
+  --bg-color: #f4f7f6;
+  --card-bg: #ffffff;
+  --text-main: #2c3e50;
+  --status-free: #27ae60;
+  /* Green */
+  --status-busy: #e74c3c;
+  /* Red */
+  --accent: #3498db;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  margin: 0;
+  padding: 15px;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Status Cards Grid */
+#status-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.status-card {
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  border-top: 8px solid;
+  transition: transform 0.2s;
+}
+
+.status-card.free {
+  border-color: var(--status-free);
+}
+
+.status-card.busy {
+  border-color: var(--status-busy);
+}
+
+.status-card strong {
+  display: block;
+  font-size: 1.2rem;
+  margin-bottom: 5px;
+}
+
+.status-card .desc {
+  font-size: 0.85rem;
+  color: #7f8c8d;
+  margin-top: 10px;
+  font-style: italic;
+}
+
+/* Form Styling */
+#booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--card-bg);
+  padding: 20px;
+  border-radius: 12px;
+}
+
+input,
+select,
+textarea,
+button {
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
+}
+
+button {
+  background-color: var(--accent);
+  color: white;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+button:active {
+  filter: brightness(0.9);
+}
+
+#install-btn {
+  background-color: var(--text-main);
+  margin-top: 10px;
+}
+
+/* Language Switcher */
+.lang-switcher {
+  margin-bottom: 10px;
+}
+
+.lang-switcher button {
+  background: none;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 5px 10px;
+  margin: 0 2px;
+}
+
+/* The Spinner Animation */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  display: inline-block;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Button Loading State */
+button:disabled {
+  background-color: #95a5a6;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.hidden {
+  display: none !important;
+}
