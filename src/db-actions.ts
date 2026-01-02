@@ -10,7 +10,7 @@ export async function getCurrentOccupancy() {
     .select(
       `
             *,
-            places (name, type)
+            places (*)
         `
     )
     .lte("start_time", now) // started before or at now
@@ -62,4 +62,20 @@ export async function isRoomAvailable(
 
   if (error) return false;
   return data.length === 0; // Returns true if no overlaps found
+}
+
+export async function getMonthlyBookings() {
+  const start = new Date();
+  const end = new Date();
+  end.setDate(start.getDate() + 30);
+
+  const { data, error } = await supabase
+    .from("bookings")
+    .select("place_id, start_time, end_time")
+    .gt("end_time", start.toISOString())
+    .lt("start_time", end.toISOString())
+    .order("start_time", { ascending: true });
+
+  if (error) throw error;
+  return data;
 }

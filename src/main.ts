@@ -4,6 +4,7 @@ import {
   bookRoom,
   getAllPlaces,
   isRoomAvailable,
+  getMonthlyBookings,
 } from "./db-actions";
 import { type Language } from "./types";
 import { getCurrentUser, signOut, signIn } from "./auth";
@@ -49,12 +50,14 @@ async function bootstrap() {
 
   // 4. Load Data (Places and Occupancy)
   try {
-    const [places, occupancy] = await Promise.all([
+    const [places, occupancy, monthly] = await Promise.all([
       getAllPlaces(),
       getCurrentOccupancy(),
+      getMonthlyBookings(),
     ]);
 
     ui.renderStatus(occupancy, places);
+    ui.renderMonthlyTable(monthly, places);
     populateRoomSelect(places);
   } catch (err) {
     console.error("Data load error:", err);
@@ -101,6 +104,7 @@ bookingForm?.addEventListener("submit", async (e) => {
   const startVal = formData.get("start-time") as string;
   const endVal = formData.get("end-time") as string;
   const placeId = formData.get("room-select") as string;
+  const description = (formData.get("description") as string) || "";
 
   // 1. Immediate Validation (Before Loading)
   if (!placeId) return alert("Error: No room selected!");
@@ -129,10 +133,12 @@ bookingForm?.addEventListener("submit", async (e) => {
       place_id: placeId,
       start_time: startDate.toISOString(),
       end_time: endDate.toISOString(),
-      description: (formData.get("description") as string) || "",
+      description: description,
       user_name: user.email?.split("@")[0] || "User",
       user_id: user.id,
     };
+
+    console.log("desc:  ", description);
 
     // 3. Availability Check
     const available = await isRoomAvailable(

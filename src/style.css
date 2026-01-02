@@ -19,9 +19,36 @@ body {
 
 header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+}
+
+.brand-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* Space between logo and text */
+}
+
+.app-logo {
+  height: 40px;
+  /* Adjust based on your preference */
+  width: auto;
+  object-fit: contain;
+}
+
+/* Ensure mobile responsiveness */
+@media (max-width: 480px) {
+  .app-logo {
+    height: 32px;
+  }
+
+  h1 {
+    font-size: 1.2rem;
+  }
 }
 
 /* Status Cards Grid */
@@ -127,7 +154,9 @@ button:active {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Button Loading State */
@@ -139,4 +168,57 @@ button:disabled {
 
 .hidden {
   display: none !important;
+}
+
+.status-card .desc {
+  margin-top: 10px;
+  font-style: italic;
+  font-size: 0.85em;
+  color: #666;
+  border-left: 3px solid #ccc;
+  padding-left: 8px;
+}
+
+.status-card.busy {
+  border-left: 5px solid #e74c3c;
+}
+
+.status-card.free {
+  border-left: 5px solid #2ecc71;
+}
+
+#monthly-view {
+  overflow-x: auto;
+  margin-top: 2rem;
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+th,
+td {
+  border: 1px solid #eee;
+  padding: 8px;
+  text-align: center;
+}
+
+th {
+  background: #f4f4f4;
+  position: sticky;
+  top: 0;
+}
+
+.cell-busy {
+  color: #e74c3c;
+  font-weight: bold;
+}
+
+.cell-free {
+  color: #2ecc71;
 }

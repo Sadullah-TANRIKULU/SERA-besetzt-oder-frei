@@ -6,31 +6,33 @@
     <link rel="manifest" href="/manifest.json" />
     <title>SERA Besetzt oder Frei</title>
     <link rel="stylesheet" href="./src/style.css" />
-    <link rel="shortcut icon" href="/icons/sera-icon.png" type="image/x-icon" />
+    <link rel="shortcut icon" href="/icons/sera-192.png" type="image/x-icon" />
   </head>
   <body>
     <header>
+      <div class="brand-container">
+        <img src="/icons/stiftung_sera.jpg" alt="SERA Logo" class="app-logo" />
+      </div>
       <div class="lang-switcher">
         <button onclick="app.setLanguage('de')">DE</button>
         <button onclick="app.setLanguage('tr')">TR</button>
         <button onclick="app.setLanguage('en')">EN</button>
       </div>
-      <header>
-        <div id="user-profile" style="display: none">
-          <span id="user-email"></span>
-          <button id="logout-btn" data-i18n="logout">Abmelden</button>
-        </div>
-      </header>
-      <h1 data-i18n="app_title">Raumplanung</h1>
+      <div id="user-profile" style="display: none">
+        <span id="user-email"></span>
+        <button id="logout-btn" data-i18n="logout">Abmelden</button>
+      </div>
+
       <button id="install-btn" style="display: none" data-i18n="install_btn">
         App Installieren
       </button>
     </header>
 
     <main id="app">
+      <h1 data-i18n="app_title">Raumplanung</h1>
       <section id="login-section">
         <input type="email" id="login-email" placeholder="Email" />
-        <button id="login-btn">Login / Magic Link</button>
+        <button id="login-btn">Anmelden</button>
       </section>
       <section id="status-section">
         <h2 data-i18n="current_status">Aktueller Status</h2>
@@ -45,15 +47,23 @@
         <h2 data-i18n="book_room">Raum Buchen</h2>
         <form id="booking-form">
           <select id="room-select" name="room-select" required></select>
-          <input
+          <label for="start-time">Von Datum</label
+          ><input
             type="datetime-local"
             id="start-time"
             name="start-time"
             required
           />
-          <input type="datetime-local" id="end-time" name="end-time" required />
+          <label for="end-time">Bis Datum</label
+          ><input
+            type="datetime-local"
+            id="end-time"
+            name="end-time"
+            required
+          />
           <textarea
             id="description"
+            name="description"
             data-i18n-placeholder="why_placeholder"
           ></textarea>
           <button type="submit" id="submit-btn" data-i18n="submit_booking">
@@ -61,6 +71,10 @@
             <span id="btn-text" data-i18n="submit_booking">Reservieren</span>
           </button>
         </form>
+      </section>
+      <section id="monthly-section">
+        <h2 data-i18n="monthly_view">Monatsübersicht</h2>
+        <div id="monthly-view"></div>
       </section>
     </main>
 
