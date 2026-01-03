@@ -130,7 +130,7 @@ export async function initBookingLogic(user: any) {
       document.getElementById("booking-note") as HTMLTextAreaElement
     ).value;
 
-    if (!vakit) return alert("Select a Vakit!");
+    if (!vakit) return alert("Namazvakti seçiniz! / Waehlen Sie eine Gebetszeit!");
 
     try {
       await createBooking({
@@ -141,7 +141,7 @@ export async function initBookingLogic(user: any) {
         note,
         userId: user.id,
       });
-      alert("Erfolgreich reserviert!");
+      alert("Başarıyla rezerve edildi! / Erfolgreich reserviert!");
       location.reload();
     } catch (err: any) {
       alert("Error: " + err.message);
