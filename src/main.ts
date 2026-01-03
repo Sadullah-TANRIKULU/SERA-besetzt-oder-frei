@@ -16,11 +16,20 @@ function applyI18n(isLoggedIn: boolean) {
     el.textContent = getTranslation(key);
   });
 
+  const installBtn = document.getElementById("pwa-install");
+  if (installBtn) {
+    installBtn.textContent = getTranslation("install_btn");
+  }
+
   // Only update placeholders if the elements exist in the DOM (when logged in)
   if (isLoggedIn) {
     const nameInput = document.getElementById("full-name") as HTMLInputElement;
-    const noteInput = document.getElementById("booking-note") as HTMLTextAreaElement;
-    const reserveBtn = document.getElementById("reserve-btn") as HTMLButtonElement;
+    const noteInput = document.getElementById(
+      "booking-note"
+    ) as HTMLTextAreaElement;
+    const reserveBtn = document.getElementById(
+      "reserve-btn"
+    ) as HTMLButtonElement;
 
     if (nameInput) nameInput.placeholder = getTranslation("name_placeholder");
     if (noteInput) noteInput.placeholder = getTranslation("note_placeholder");
@@ -60,8 +69,10 @@ async function bootstrap() {
   // 3. Login Event Listener
   loginForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const email = (document.getElementById("login-email") as HTMLInputElement).value;
-    const pass = (document.getElementById("login-pass") as HTMLInputElement).value;
+    const email = (document.getElementById("login-email") as HTMLInputElement)
+      .value;
+    const pass = (document.getElementById("login-pass") as HTMLInputElement)
+      .value;
 
     try {
       await login(email, pass);
@@ -82,7 +93,9 @@ async function bootstrap() {
 // Register SW
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/sw.js").catch((err) => console.error("PWA Error", err));
+    navigator.serviceWorker
+      .register("/sw.js")
+      .catch((err) => console.error("PWA Error", err));
   });
 }
 

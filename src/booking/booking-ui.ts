@@ -63,24 +63,26 @@ export async function initBookingLogic(user: any) {
         btn.className = `vakit-selector ${isBusy ? "busy" : "available"}`;
         btn.disabled = isBusy;
 
+        const translatedVakit = t(vakit.toLowerCase());
+
         btn.innerHTML = `
-  <strong>${vakit}</strong>
-  ${
-    isBusy
-      ? `
-    <div class="booking-details">
-      <span class="booked-user">👤 ${booking.user_name}</span>
-      ${
-        booking.description
-          ? `<blockquote class="booking-note">"${booking.description}"</blockquote>`
-          : ""
-      }
-      <span class="delete-btn" title="Löschen">🗑️</span>
-    </div>
-  `
-      : `<span>${t("free")}</span>`
-  }
-`;
+    <strong>${translatedVakit}</strong> 
+    ${
+      isBusy
+        ? `
+      <div class="booking-details">
+        <span class="booked-user">👤 ${booking.user_name}</span>
+        ${
+          booking.description
+            ? `<blockquote class="booking-note">"${booking.description}"</blockquote>`
+            : ""
+        }
+        <span class="delete-btn" title="Löschen">🗑️</span>
+      </div>
+    `
+        : `<span>${t("free")}</span>`
+    }
+  `;
 
         if (isBusy) {
           const delIcon = btn.querySelector(".delete-btn");
