@@ -10,7 +10,11 @@
   <body>
     <header>
       <img src="/icons/stiftung_sera.jpg" alt="Logo" class="logo" />
-      <button id="pwa-install" class="hidden">📲 App Installieren</button>
+      <div class="lang-switcher">
+        <button onclick="setLanguage('de')">DE</button>
+        <button onclick="setLanguage('tr')">TR</button>
+      </div>
+      <button id="pwa-install" class="hidden">📲 Installieren</button>
       <div id="auth-status">
         <span id="display-user"></span>
         <button id="logout-btn" class="hidden">Logout</button>
@@ -50,7 +54,11 @@
             placeholder="Ihr Name / Adınız"
             required
           />
-          <textarea id="booking-note" placeholder="Warum reservieren Sie? (Zwingend)" required></textarea>
+          <textarea
+            id="booking-note"
+            placeholder="Warum reservieren Sie? (Zwingend)"
+            required
+          ></textarea>
           <button type="submit" id="reserve-btn">Reservieren</button>
         </form>
       </section>

@@ -1,4 +1,10 @@
-import { getOccupiedVakits, createBooking, getPlaces } from "./booking-logic";
+import {
+  getOccupiedVakits,
+  createBooking,
+  getPlaces,
+  cancelBooking,
+} from "./booking-logic";
+import { t } from "../i18n/translations";
 
 const VAKITS = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
 
@@ -17,69 +23,99 @@ export async function initBookingLogic(user: any) {
     roomSelect.innerHTML =
       '<option value="" disabled selected>Raum wählen...</option>';
     places.forEach((p) => {
-      const opt = new Option(p.name, p.id);
+      const translatedName = t(p.name);
+      const opt = new Option(translatedName, p.id);
       roomSelect.add(opt);
     });
   }
 
   // 2. Refresh Grid Logic
   const refreshGrid = async () => {
-  const grid = document.getElementById("vakit-grid");
-  const selectedVakitInput = document.getElementById("selected-vakit") as HTMLInputElement;
-  
-  if (!dateInput.value || !roomSelect.value || !grid) return;
+    const grid = document.getElementById("vakit-grid");
+    const selectedVakitInput = document.getElementById(
+      "selected-vakit"
+    ) as HTMLInputElement;
 
-  // Clear current selection so user must pick again for the new date/room
-  if (selectedVakitInput) selectedVakitInput.value = "";
+    if (!dateInput.value || !roomSelect.value || !grid) return;
 
-  grid.innerHTML = "<p class='loading'>Laden...</p>";
-  
-  try {
-    // Calling the correct function name from booking-logic.ts
-    const occupied = await getOccupiedVakits(dateInput.value, roomSelect.value);
+    // Clear current selection so user must pick again for the new date/room
+    if (selectedVakitInput) selectedVakitInput.value = "";
 
-    grid.innerHTML = ""; // Clear loader
-    
-    VAKITS.forEach((vakit) => {
-      const booking = occupied.find(
-        (b) => b.vakit.toLowerCase() === vakit.toLowerCase()
+    grid.innerHTML = "<p class='loading'>Laden...</p>";
+
+    try {
+      // Calling the correct function name from booking-logic.ts
+      const occupied = await getOccupiedVakits(
+        dateInput.value,
+        roomSelect.value
       );
-      const isBusy = !!booking;
 
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = `vakit-selector ${isBusy ? "busy" : "available"}`;
-      btn.disabled = isBusy;
+      grid.innerHTML = ""; // Clear loader
 
-      btn.innerHTML = `
-        <strong>${vakit}</strong>
-        ${isBusy ? `
-          <div class="booking-details">
-            <span class="booked-user">👤 ${booking.user_name}</span>
-            <blockquote class="booking-note">"${booking.description || ''}"</blockquote>
-          </div>
-        ` : "<span>Frei ✅</span>"}
-      `;
+      VAKITS.forEach((vakit) => {
+        const booking = occupied.find(
+          (b) => b.vakit.toLowerCase() === vakit.toLowerCase()
+        );
+        const isBusy = !!booking;
 
-      if (!isBusy) {
-        btn.onclick = () => {
-          document
-            .querySelectorAll(".vakit-selector")
-            .forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          if (selectedVakitInput) selectedVakitInput.value = vakit;
-        };
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = `vakit-selector ${isBusy ? "busy" : "available"}`;
+        btn.disabled = isBusy;
+
+        btn.innerHTML = `
+  <strong>${vakit}</strong>
+  ${
+    isBusy
+      ? `
+    <div class="booking-details">
+      <span class="booked-user">👤 ${booking.user_name}</span>
+      ${
+        booking.description
+          ? `<blockquote class="booking-note">"${booking.description}"</blockquote>`
+          : ""
       }
-      grid.appendChild(btn);
-    });
-  } catch (error) {
-    grid.innerHTML = "<p class='error'>Fehler beim Laden.</p>";
-    console.error(error);
+      <span class="delete-btn" title="Löschen">🗑️</span>
+    </div>
+  `
+      : `<span>${t("free")}</span>`
   }
-};
+`;
 
-roomSelect?.addEventListener("change", refreshGrid);
-dateInput?.addEventListener("change", refreshGrid);
+        if (isBusy) {
+          const delIcon = btn.querySelector(".delete-btn");
+          delIcon?.addEventListener("click", async (e) => {
+            e.stopPropagation(); // Prevents selecting the vakit
+            if (confirm(t("confirm_delete") || "Delete?")) {
+              try {
+                await cancelBooking(dateInput.value, roomSelect.value, vakit);
+                refreshGrid(); // Refresh immediately to show it's free
+              } catch (err) {
+                alert("Error deleting");
+              }
+            }
+          });
+        }
+
+        if (!isBusy) {
+          btn.onclick = () => {
+            document
+              .querySelectorAll(".vakit-selector")
+              .forEach((b) => b.classList.remove("active"));
+            btn.classList.add("active");
+            if (selectedVakitInput) selectedVakitInput.value = vakit;
+          };
+        }
+        grid.appendChild(btn);
+      });
+    } catch (error) {
+      grid.innerHTML = "<p class='error'>Fehler beim Laden.</p>";
+      console.error(error);
+    }
+  };
+
+  roomSelect?.addEventListener("change", refreshGrid);
+  dateInput?.addEventListener("change", refreshGrid);
   // 3. Submit Logic
   bookingForm?.addEventListener("submit", async (e) => {
     e.preventDefault();

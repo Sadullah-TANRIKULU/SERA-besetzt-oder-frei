@@ -37,3 +37,18 @@ export async function createBooking(payload: {
 
   if (error) throw error;
 }
+
+export async function cancelBooking(
+  date: string,
+  placeId: string,
+  vakit: string
+) {
+  const { error } = await supabase
+    .from("bookings")
+    .delete()
+    .eq("booking_date", date)
+    .eq("place_id", placeId)
+    .eq("vakit", vakit);
+
+  if (error) throw error;
+}
