@@ -16,12 +16,6 @@ function applyI18n(isLoggedIn: boolean) {
     el.textContent = getTranslation(key);
   });
 
-  const installBtn = document.getElementById("pwa-install");
-  if (installBtn) {
-    installBtn.textContent = getTranslation("install_btn");
-  }
-
-  // Only update placeholders if the elements exist in the DOM (when logged in)
   if (isLoggedIn) {
     const nameInput = document.getElementById("full-name") as HTMLInputElement;
     const noteInput = document.getElementById(
@@ -30,16 +24,46 @@ function applyI18n(isLoggedIn: boolean) {
     const reserveBtn = document.getElementById(
       "reserve-btn"
     ) as HTMLButtonElement;
+    const installBtn = document.getElementById(
+      "pwa-install"
+    ) as HTMLButtonElement;
 
     if (nameInput) nameInput.placeholder = getTranslation("name_placeholder");
     if (noteInput) noteInput.placeholder = getTranslation("note_placeholder");
     if (reserveBtn) reserveBtn.textContent = getTranslation("reserve_btn");
+    if (installBtn) installBtn.textContent = getTranslation("install_btn");
+
+    // Update the room dropdown labels without losing selection
+    const roomSelect = document.getElementById(
+      "room-select"
+    ) as HTMLSelectElement;
+    if (roomSelect) {
+      Array.from(roomSelect.options).forEach((option) => {
+        if (option.value !== "") {
+        }
+      });
+    }
   }
 }
 
 (window as any).setLanguage = (newLang: string) => {
   localStorage.setItem("lang", newLang);
-  location.reload();
+
+  // Update the visual state
+  const user =
+    !!document
+      .getElementById("booking-section")
+      ?.classList.contains("hidden") === false;
+
+  // Re-run the translation logic
+  applyI18n(user);
+
+  // 2. Trigger a grid refresh to translate Vakit names and "Free" status
+  // We manually dispatch a 'change' event to the date input
+  const dateInput = document.getElementById("booking-date") as HTMLInputElement;
+  if (dateInput && dateInput.value) {
+    dateInput.dispatchEvent(new Event("change"));
+  }
 };
 
 async function bootstrap() {

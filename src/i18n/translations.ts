@@ -55,8 +55,8 @@ export const translations: any = {
   },
 };
 
-export const currentLang = localStorage.getItem("lang") || "de";
 
 export function t(key: string) {
+  const currentLang = localStorage.getItem("lang") || "de";
   return translations[currentLang][key] || translations["de"][key];
 }
